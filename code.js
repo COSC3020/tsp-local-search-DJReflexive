@@ -33,10 +33,11 @@ function localSearch(matrix, route) {
       const minTemp = 0.0000001; // Threshold when program terminates
       let temp = 100.0 * route.length; // Tempurature
 
-      let bestWeight = evaluateRoute(matrix, route); // Current Best Route
+      let bestWeight = evaluateRoute(matrix, route); // Current Best Weight
+      let bestRoute = deepClone(route); // Current Best Route
       
       while (temp > minTemp) {
-            // Psuedo:
+            route = deepClone(bestRoute);
 
             // Generate random i
             let i = getRandomInt(0, route.length);
@@ -52,6 +53,7 @@ function localSearch(matrix, route) {
             let newWeight = evaluateRoute(matrix, route);
             if (bestWeight > newWeight) {
                   bestWeight = newWeight;
+                  bestRoute = deepClone(route);
             }
 
             temp *= alpha; // Lowers Tempurature, or "Cooling"
@@ -65,7 +67,7 @@ function localSearch(matrix, route) {
 
       /* Helper Function */
 
-      
+
 
 function evaluateRoute(matrix, route) {
       let sum = 0;
@@ -98,6 +100,17 @@ function generateRandomRoute(matrix, startIndex) {
 // Range of Random Integers from W3Schools.com
 function getRandomInt(min, max) {
       return Math.floor(Math.random() * (max - min) ) + min;
+}
+
+// Deep clones given array
+function deepClone(array) {
+      let newArray = [];
+
+      for (let i = 0; i < array.length; i++) {
+            newArray[i] = array[i];
+      }
+
+      return newArray;
 }
 
 // Finds a start node (by finding the first available one)
