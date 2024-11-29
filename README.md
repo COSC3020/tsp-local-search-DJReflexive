@@ -52,9 +52,38 @@ is the worst-case asymptotic memory complexity? Add your answer, including your
 reasoning, to this markdown file.
 
 
-## My Runtime Analysis
+# My Analysis
+### Choosing how to terminate
 
+My implementation of this algorithm uses Simulated Annealing. A technique which uses randomness and probability to choose how long the algorithm will run for. The idea of using a tempurature, and it decreasing over every iteration of the program. Eventually, the idea is that the algorithm will find the best case result within this time. Once the tempurature reaches (a value very close to) zero, the program terminates and returns the best answer it finds.
 
+### How I choose i and k
+
+The Simulated Annealing implementation has the characteristic of randomly choosing new routes. If the randomly chosen route happens to be better than the original route, it will make the new route the base in which it will make more decisions off of.
+
+### Runtime Analysis
+
+Upon the algorithm starting, it first checks to see if the matrix is a valid size, if not, returns 0. Otherwise the program will seek a starting node. If the matrix is full of zeros, the algorithm will see this and terminate in $\Theta(n^2)$ time, since every node in the matrix must be checked. However, if the matrix is not full of zeros, it will run in constant time because this means the graph is a completely connected graph (it will pick the first available node). 
+
+The algorithm then generates a random route to be process. This takes $\Theta(n)$ time since it only needs to generate a one-dimensional array.
+
+The bestWeight is calculated in $\Theta(n)$ time since all it needs to do is evaluate the length of the route.
+
+At this point, the local search is executed. The Simulated Annealing portion (the while loop) actually will run in a constant time. No matter what the input size is, it will always run the same amount of times. The is a do-while that could technically run infinitely due to random number generation, but we will assume this is a constant time operation since it is more likely to not loop indefinitely. The twoOptSwap() method is called, taking a time complexity of $\Theta(2n)$ since the subarray is iterated through twice. And finally another evaluation of the current route, which takes $\Theta(n)$ time.
+
+Once the Simulated Annealing while loop ends, the program terminates and returns the result. Combining all the complexities, we get $\Theta(n^2 + n + n + 2n + n)$ or $\Theta(n^2)$.
+
+### Memory Analysis
+
+Upon calling the tsp_ls function, we need a distance_matrix, which takes up a space of $\Theta(n^2)$ since it is a square matrix. Only a single index (constant amount) is needed to represent the startingNodeIndex. For the route array, it needs $\Theta(n)$ space since it needs to keep a tour of all the locations in the matrix.
+
+A few constant variables are delcared in localSearch(), but never grow or change in size. In all of the loops, most of the variable changes are in-place.
+
+In twoOptSwap(), there is an auxilary array called to help reverse, taking a space of $\Theta(n)$, and is no longer needed after. Since twoOptSwap() is within a while loop that takes a constant number of operations, the complexity doesn't change.
+
+The evaulateRoute() method declares a sum variable, but doesn't grow, so it is a constant operation.
+
+Combining these complexities results in $\Theta(n^2 + n + n)$ space complexity, which is just $\Theta(n^2)$ when reduced.
 
 # Sources
 

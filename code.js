@@ -31,13 +31,11 @@ function twoOptSwap(route, i, k) {
 function localSearch(matrix, route) {
       const alpha = 0.99; // Rate at which tempurature decreases (Pretty Slow)
       const minTemp = 0.0000001; // Threshold when program terminates
-      let temp = 100.0 * route.length; // Tempurature
+      let temp = 100.0; // Tempurature
 
       let bestWeight = evaluateRoute(matrix, route); // Current Best Weight
-      let bestRoute = deepClone(route); // Current Best Route
       
       while (temp > minTemp) {
-            route = deepClone(bestRoute);
 
             // Generate random i
             let i = getRandomInt(0, route.length);
@@ -53,7 +51,6 @@ function localSearch(matrix, route) {
             let newWeight = evaluateRoute(matrix, route);
             if (bestWeight > newWeight) {
                   bestWeight = newWeight;
-                  bestRoute = deepClone(route);
             }
 
             temp *= alpha; // Lowers Tempurature, or "Cooling"
@@ -85,7 +82,7 @@ function generateRandomRoute(matrix, startIndex) {
 
       randomRoute.push(startIndex);
 
-      while (randomRoute.length != matrix.length) {
+      while (randomRoute.length < matrix.length) {
             let newEntry = getRandomInt(0, matrix.length);
 
             // If newEntry already does not exist, add it
@@ -102,25 +99,16 @@ function getRandomInt(min, max) {
       return Math.floor(Math.random() * (max - min) ) + min;
 }
 
-// Deep clones given array
-function deepClone(array) {
-      let newArray = [];
-
-      for (let i = 0; i < array.length; i++) {
-            newArray[i] = array[i];
-      }
-
-      return newArray;
-}
-
 // Finds a start node (by finding the first available one)
-function findStartNode(cities) {
-      let size = cities.length;
+// This method can also detect zero-filled matrices by
+//    returning -1
+function findStartNode(matrix) {
+      let size = matrix.length;
 
       for (let i = 0; i < size; i++) {
           for (let j = 0; j < size; j++) {
               // Checks for an existing edge
-              if (cities[i][j] > 0) return i; 
+              if (matrix[i][j] > 0) return i; 
   
               // If there were no nodes in the matrix that contained an edge
               if (i == size-1) return -1;
