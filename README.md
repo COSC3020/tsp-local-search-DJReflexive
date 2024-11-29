@@ -75,7 +75,7 @@ Once the Simulated Annealing while loop ends, the program terminates and returns
 
 ### Memory Analysis
 
-Upon calling the tsp_ls function, we need a distance_matrix, which takes up a space of $\Theta(n^2)$ since it is a square matrix. Only a single index (constant amount) is needed to represent the startingNodeIndex. For the route array, it needs $\Theta(n)$ space since it needs to keep a tour of all the locations in the matrix.
+Only a single index (constant amount) is needed to represent the startingNodeIndex. For the route array, it needs $\Theta(n)$ space since it needs to keep a tour of all the locations in the matrix.
 
 A few constant variables are delcared in localSearch(), but never grow or change in size. In all of the loops, most of the variable changes are in-place.
 
@@ -83,7 +83,7 @@ In twoOptSwap(), there is an auxilary array called to help reverse, taking a spa
 
 The evaulateRoute() method declares a sum variable, but doesn't grow, so it is a constant operation.
 
-Combining these complexities results in $\Theta(n^2 + n + n)$ space complexity, which is just $\Theta(n^2)$ when reduced.
+Combining these complexities results in $\Theta(n + n)$ space complexity, which is just $\Theta(n)$ when reduced.
 
 # Sources
 
