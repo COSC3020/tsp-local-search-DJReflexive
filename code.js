@@ -9,18 +9,10 @@ function tsp_ls(distance_matrix) {
       // If no edges exist, there is no distance
       if (startingNodeIndex == -1) { return 0; }
 
-      // Returns random indices order
+      // Returns random order of indexes
       let route = generateRandomRoute(distance_matrix, startingNodeIndex);
 
-      // TODO: - The Stopping Criteria is when the Tempurature reaches 0
-      //       - I am going to randomly choose i and k (not allowing a state to run twice)
-
-      return -1;
-}
-
-// Systematically goes through 
-function localSearch(matrix, route) {
-
+      return localSearch(distance_matrix, route);
 }
 
 function twoOptSwap(route, i, k) {
@@ -35,6 +27,56 @@ function twoOptSwap(route, i, k) {
       for (let j = 0; j+i <= k; j++) { route[i+j] = subRoute[j]; }
 }
 
+// Implements Simulated Annealing
+function localSearch(matrix, route) {
+      const alpha = 0.99; // Rate at which tempurature decreases (Pretty Slow)
+      const minTemp = 0.0000001; // Threshold when program terminates
+      let temp = 100.0 * route.length; // Tempurature
+
+      let bestWeight = evaluateRoute(matrix, route); // Current Best Route
+      
+      while (temp > minTemp) {
+            // Psuedo:
+
+            // Generate random i
+            let i = getRandomInt(0, route.length);
+
+            // Generate random k, cannot be i (loop until it gets a different value)
+            let k = -1;
+            do {
+                  k = getRandomInt(0, route.length);
+            } while (i == k);
+
+            twoOptSwap(route, i, k);
+
+            let newWeight = evaluateRoute(matrix, route);
+            if (bestWeight > newWeight) {
+                  bestWeight = newWeight;
+            }
+
+            temp *= alpha; // Lowers Tempurature, or "Cooling"
+      }
+
+      return bestWeight;
+}
+
+
+
+
+      /* Helper Function */
+
+      
+
+function evaluateRoute(matrix, route) {
+      let sum = 0;
+
+      for (let i = 0; i < route.length-1; i++) {
+            sum += matrix[route[i]][route[i+1]];
+      }
+      
+      return sum;
+}
+
 // Generates a random route of the matrix, returning the indices
 function generateRandomRoute(matrix, startIndex) {
       let randomRoute = [];
@@ -42,7 +84,7 @@ function generateRandomRoute(matrix, startIndex) {
       randomRoute.push(startIndex);
 
       while (randomRoute.length != matrix.length) {
-            let newEntry = getRndIndex(0, matrix.length);
+            let newEntry = getRandomInt(0, matrix.length);
 
             // If newEntry already does not exist, add it
             if (randomRoute.indexOf(newEntry) == -1) {
@@ -51,15 +93,14 @@ function generateRandomRoute(matrix, startIndex) {
       }
 
       return randomRoute;
-
-
-      // Range of Random Integers from W3Schools.com
-      function getRndIndex(min, max) {
-            return Math.floor(Math.random() * (max - min) ) + min;
-      }
 }
 
-// Finds a new start node
+// Range of Random Integers from W3Schools.com
+function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (max - min) ) + min;
+}
+
+// Finds a start node (by finding the first available one)
 function findStartNode(cities) {
       let size = cities.length;
 
@@ -74,16 +115,3 @@ function findStartNode(cities) {
       }
 }
 
-
-
-dm = [[0,0,0],
-      [0,0,0],
-      [0,0,0]];
-console.log("1st Result: " + tsp_ls(dm));
-console.assert(tsp_ls(dm) == 0);
-
-dm = [[0,1,2],
-      [1,0,2],
-      [2,2,0]];
-console.log("2nd Result: " + tsp_ls(dm));
-console.assert(tsp_ls(dm) >= 3);
