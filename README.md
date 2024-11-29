@@ -58,7 +58,9 @@ reasoning, to this markdown file.
 
 # Sources
 
-- https://www.youtube.com/watch?v=SC5CX8drAtU - Animation/Intro Video to the algorithm
+- https://www.youtube.com/watch?v=SC5CX8drAtU - Vizualization/Intro Video to the algorithm (where I got the idea to go with Simulated Annealing)
+- https://www.youtube.com/watch?v=NPE3zncXA5s - Description of Simulated Annealing with Vizualization
+- https://www.w3schools.com/js/js_random.asp - For generating a range of random numbers with Math.random()
 
 # Plagiarism Acknowledgement
 
